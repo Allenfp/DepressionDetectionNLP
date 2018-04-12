@@ -79,26 +79,30 @@
                         
                         <form  action="" method="post" role="form">
                                 {{ form.csrf }}
-                                <div class="form-group">
-                                  <label for="name"></label>
-                                  <input type="text" class="form-control" id="name" name="name" placeholder="Enter comment here...">
+                            <div class="form-row">
+                                <div class="col-12">
+                                  <!-- <label for="name"></label> -->
+                                  <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Enter comment here...">
                                 </div>
-                                <button type="submit" class="btn btn-success">Submit</button>
-                              </form>
-                    </br>
-                    <br>
+                                <div class="col-12">
+                                <button type="submit" class="btn btn-block btn-lg btn-primary">Submit</button>
+                                </div>
+                                </div>
+                            </form>
+                            
+                            <!-- Code to display information from the endpoint     -->
                             {% with messages = get_flashed_messages(with_categories=true) %}
                                 {% if messages %}
                     
                             {% for message in messages %}
                                 {% if "Error" not in message[1]: %}
-                                    <div class="alert alert-info">
-                                    <h5>Result: </h5> {{ message[1] }}
+                                    <div class="intro-message">
+                                    <h3>Result: {{ message[1] }} </h3>
                                     </div>
                                 {% endif %}
                     
                                 {% if "Error" in message[1]: %}
-                                    <div class="alert alert-warning">
+                                    <div class="intro-message">
                                     {{ message[1] }}
                                     </div>
                                 {% endif %}
