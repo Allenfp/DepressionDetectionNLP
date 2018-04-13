@@ -1,6 +1,131 @@
 from flask import Flask, render_template, flash, request
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
- 
+import pandas as pd
+from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+from pyspark import SparkConf, SparkContext
+from pyspark.sql import SparkSession
+from pyspark.ml.feature import Tokenizer, StopWordsRemover, HashingTF, IDF, StringIndexer
+from pyspark.ml.evaluation import MulticlassClassificationEvaluator
+from pyspark.ml.feature import VectorAssembler
+from pyspark.ml.linalg import Vector
+from pyspark.ml import Pipeline
+from pyspark.ml.classification import NaiveBayes
+
+#Start Spark Session
+conf = SparkConf().setAppName('original_NB').setMaster("local")
+conf.set("spark.executor.memory", "4g") #This will take at least 4G to run.
+sc = SparkContext(conf=conf)
+spark = SparkSession(sc)
+
+#############################
+####### TRAINING DATA #######
+#############################
+
+#Build Pandas DataFrame
+train_df = pd.read_csv("final_training_data.txt", delimiter="\t")
+train_df["pos"] = ""
+train_df["neg"] = ""
+train_df["label"] = ""
+train_df.head()
+
+#Perform Sentiment Analysis on Training Data and Populate Pandas DataFrame
+analyzer = SentimentIntensityAnalyzer()
+
+for index, row in train_df.iterrows():
+
+    scores = analyzer.polarity_scores(row[0])
+    pos = scores['pos']
+    neg = scores['neg']
+    row[2] = pos 
+    row[3] = neg
+    if row.subreddit == "sw":
+        row.label = 0
+    elif row.subreddit == "cc":
+        row.label = 1
+#train_df
+
+#Eliminates negative cc posts and positive sw posts. Creates better defined training set.
+for index, row in train_df.iterrows():
+    if row.neg > 0.1 and row.subreddit == "cc":
+        train_df.drop(index, inplace=True)
+    elif row.pos > 0.1 and row.subreddit == "sw":
+        train_df.drop(index, inplace=True)    
+    else:
+        pass
+    
+#Put Pandas DataFrame into Spark DataFrame
+tr_spark_df = spark.createDataFrame(train_df)
+
+#################################
+####### TRAIN & FIT DATA ########
+#################################
+
+# Define the PipeLine Variables
+tokenizer = Tokenizer(inputCol="combined", outputCol="token_text")
+stopremove = StopWordsRemover(inputCol='token_text',outputCol='stop_tokens')
+hashingTF = HashingTF(inputCol="stop_tokens", outputCol='hash_token')
+idf = IDF(inputCol='hash_token', outputCol='idf_token')
+clean_up = VectorAssembler(inputCols=['idf_token','neg'], outputCol='features')
+
+# Define the Pipeline Variable
+data_prep_pipeline = Pipeline(stages=[tokenizer, stopremove, hashingTF, idf, clean_up])
+
+# Fit and Transform the Training and Testing Spark Dataframes.
+
+#First the Cleaning
+cleaner_train = data_prep_pipeline.fit(tr_spark_df)
+cleaned_train = cleaner_train.transform(tr_spark_df)
+
+#Note, keeping this here as a tool in case we need to tune model later.
+(training, x) = cleaned_train.randomSplit([1.0, 0.0]) #Uses Entire Training Set (After vadersentiment pruning)
+
+# Create a Naive Bayes model and fit training data
+nb = NaiveBayes(smoothing=1.0, modelType='multinomial')
+sub_predictor = nb.fit(training)
+
+def check_string(test_string):
+
+    #Create Single Input Pandas DataFrame.
+    d = {'combined': test_string, 'pos':"", 'neg':""}
+    df = pd.DataFrame(d, index=[0])
+
+    #Analyze Sentiment and Populate DataFrame. 
+    analyzer = SentimentIntensityAnalyzer()
+    for index, row in df.iterrows():
+        scores = analyzer.polarity_scores(row[0])
+        pos = scores['pos']
+        neg = scores['neg']
+        row[1] = pos 
+        row[2] = neg
+
+    #Convert to Spark DataFrame.
+    sdf = spark.createDataFrame(df)
+
+    #Fit & Clean Spark DataFrame 
+    cleaned_sc = cleaner_train.transform(sdf)
+    cleaned_sc.show()
+    print(type(sub_predictor))
+
+    #Perform Prediction and Print results.
+    pc_results = sub_predictor.transform(cleaned_sc)
+    pc_results.select('probability', 'prediction').show(truncate=False)
+    print("1 = Casual Conversation, 0 = Depression/Suicial Ideation")
+
+    response = ""
+    prediction = pc_results.select('prediction').rdd.map(lambda row : row[0]).collect()[0]
+    probability = pc_results.select('probability').rdd.map(lambda row : row[0]).collect()[0]
+    probability_sad = probability[0]
+    probability_normal = probability[1]
+
+    if prediction == 0:
+        response = f"YIKES! There is ample evidence to indicate sadness and/or depression.  Model Probability: {round(probability_sad*100)}% "
+    else:
+        response = f"Everthing is looking good over here! Model Probability: {round(probability_normal*100)}% "
+
+    return response
+
+
+
 # App config.
 DEBUG = True
 app = Flask(__name__)
@@ -21,8 +146,8 @@ def hello():
         print(name)
  
         if form.validate():
-            # Save the comment here.
-            flash(name)
+            check_string(name)
+            flash(check_string(name))
         else:
             flash('Error: All the form fields are required. ')
  
