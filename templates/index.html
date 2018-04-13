@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Final Project - Suicide Watch Machine Learning</title>
+    <title>Final Project - Machine Learning</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
@@ -55,6 +55,15 @@
                         <a href="#methodology">Methodology</a>
                     </li>
                     <li>
+                        <a href="#visuals">Visuals</a>
+                    </li>
+                    <li>
+                        <a href="#limitations">Limitations</a>
+                    </li>
+                    <li>
+                        <a href="#nextsteps">Next Steps</a>
+                    </li>
+                    <li>
                         <a href="#resources">Resources</a>
                     </li>
                 </ul>
@@ -73,7 +82,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="intro-message">
-                        <h1>Suicide Watch <br>Machine Learning</h1>
+                        <h1>Social Media Emotion Analysis <br>Machine Learning</h1>
                         <h3>Team FrontRowRiders</h3>
                         <hr class="intro-divider">
                         
@@ -96,13 +105,13 @@
                     
                             {% for message in messages %}
                                 {% if "Error" not in message[1]: %}
-                                    <div class="intro-message">
+                                    <div class="intro-message2">
                                     <h3>Result: {{ message[1] }} </h3>
                                     </div>
                                 {% endif %}
                     
                                 {% if "Error" in message[1]: %}
-                                    <div class="intro-message">
+                                    <div class="intro-message2">
                                     {{ message[1] }}
                                     </div>
                                 {% endif %}
@@ -140,9 +149,8 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">About this Project</h2>
-                    <p class="lead">Social Media sentiments represent some people's deepest feelings.  Some individuals with suicidal tendencies share posts and comments in Social Media 
-                        and these could be digital clues.  Our tool aims to assist and identify such tendencies and help prevent potential tragedies.<br><br>Team members are 
-                    Allen, Jenny, Mehreen, and Rommel.</p>
+                    <p class="lead">Given how common depression really is, its surprising that there aren’t more ways to indicate its presence in ones life. Some individuals with suicidal tendencies share posts and comments in Social Media and these could be digital clues. We used machine learning to try to indicate it’s presence in texts wherever possible. Our tool aims to assist and identify such tendencies and help prevent potential tragedies.</p>
+                    <p class="lead">Team members: Allen, Jenny, Mehreen, and Rommel.</p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                     <img class="img-responsive" src="{{ url_for('static', filename='img/hope2.jpg') }}" alt="">
@@ -164,11 +172,82 @@
                 <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">Methodology<br></h2>
-                    <p class="lead">Using Reddit posts and python-crfSuite....we used Machine Learning and NLP to perform analysis on Social Media posts.</p>
+                    <h2 class="section-heading">Methodology</a><br></h2>
+                    <p class="lead">We used Natural Language Processing on text scraped from subreddit sr/SuicideWatch and r/CasualConversations. After cleaning it we performed a sentiment analysis on it and took out outliers, and then trained a predictive model to recognize if a text indicates the author's happiness or sadness.</p>
+                    <p><h2 class="section-heading">Tools used</h2></p>
+                        <p><h3>Analysis:</h3> PySpark, Praw, NLTK, VADER Sentiment Analysis, Pandas, WTForms
+                        <p><h3>Visualization:</h3> Wordcloud,  Bootstrap, HTML, CSS</p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-                    <img class="img-responsive" src="{{ url_for('static', filename='img/nlp2.png') }}" alt="">
+                    <img id="myImg" style="width:500px;height:500px;" class="img-responsive" src="{{ url_for('static', filename='img/DD_NLP_Model.png') }}" alt="">
+                </div>
+            </div>
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
+                <span class="close">&times;</span>
+                <img class="modal-content" id="img01">
+                <div id="caption"></div>
+              </div>
+            <!-- End of the Modal -->
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->
+
+    <a name="visuals"></a>
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Visuals</h2>
+                    <p class="lead">Here are the word maps from the training data.  As you can see, quick look on our data shows how texts expressing 
+                        different emotions can be very similar.
+                    </p>
+                </div>
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/Happy2.png') }}" alt="">
+                </div></br></br>
+                <div align=center class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/Sad2.png') }}" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <a name="limitations"></a>
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Limitations<br></h2>
+                    <p class="lead">Below are some of the challenges and limitations we came across in our project.</p>
+                    <ul>
+                        <li>
+                            Text needs to be of slightly personal nature.
+                        </li>
+                        <li>
+                            Short sentences can yield incorrect predictions.
+                        </li>
+                        <li>
+                            Strong words such as "happy" and "excited" can skew the results.
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/limitation.jpg') }}" alt="">
                 </div>
             </div>
 
@@ -178,7 +257,7 @@
     </div>
     <!-- /.content-section-b -->
 
-    <a name="resources"></a>
+    <a name="nextsteps"></a>
     <div class="content-section-a">
 
         <div class="container">
@@ -187,11 +266,17 @@
                 <div class="col-lg-5 col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
-                    <h2 class="section-heading">Resources</h2>
-                    <p class="lead">Many thanks to <a href="https://www.reddit.com">Reddit</a> as the source of our training data.</p>
+                    <h2 class="section-heading">Next Steps</h2>
+                    <p class="lead">Below are some ideas of where this tool can go from here:
+                    </p>
+                    <ul>
+                        <li>Feedback Loop</li>
+                        <li>Create an app so this tool can be integrated to browsers and other sites</li>
+                        <li>Help connect users with helplines</li>
+                    </ul>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
-                    <img class="img-responsive" src="{{ url_for('static', filename='img/reddit.jpg') }}" alt="">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/nextsteps.jpg') }}" alt="">
                 </div>
             </div>
 
@@ -200,6 +285,29 @@
 
     </div>
     <!-- /.content-section-a -->
+
+    <a name="resources"></a>
+    <div class="content-section-b">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+                    <hr class="section-heading-spacer">
+                    <div class="clearfix"></div>
+                    <h2 class="section-heading">Resources<br></h2>
+                    <p class="lead">Many thanks to <a href="https://www.reddit.com">Reddit</a> as the source of our training data.</p>
+                </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/reddit.jpg') }}" alt="">
+                </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-b -->    
 
 	<a  name="contact"></a>
     <div class="banner">
@@ -250,10 +358,23 @@
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
+                            <a href="#visuals">Visuals</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#limitations">Limitations</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#nextsteps">Next Steps</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
                             <a href="#resources">Resources</a>
                         </li>
                     </ul>
-                    <p class="copyright text-muted small">Copyright &copy; Your Company 2014. All Rights Reserved</p>
+                    <p class="copyright text-muted small">Disclaimer: This website is a project designed to predict emotional sentiments using machine learning.  This does not provide professional advice.  If you are in a state of emergency, please call 911 or/and seek professional support.  Thank you.</p>
+                    <p class="copyright text-muted small">Copyright &copy; FrontRowRiders 2018. All Rights Reserved</p>
                 </div>
             </div>
         </div>
@@ -265,6 +386,9 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+    <!-- Modal JavaScript -->
+    <script src="{{ url_for('static', filename='js/modal.js') }}"></script>    
 
 </body>
 
