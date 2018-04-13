@@ -120,7 +120,7 @@ def check_string(test_string):
     if prediction == 0:
         response = f"YIKES! There is ample evidence to indicate sadness and/or depression.  Model Probability: {round(probability_sad*100)}% "
     else:
-        response = f"Everthing is looking good over here! Model Probability: {round(probability_normal*100)}% "
+        response = f"Everything is looking good over here! Model Probability: {round(probability_normal*100)}% "
 
     return response
 
