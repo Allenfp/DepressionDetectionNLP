@@ -128,6 +128,7 @@ def check_string(test_string):
     return response
 
 
+
 def check_string_api(test_string):
 
     #Create Single Input Pandas DataFrame.

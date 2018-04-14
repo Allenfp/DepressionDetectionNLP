@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Final Project - Machine Learning</title>
+    <title>Social Media Emotion Analysis - Machine Learning</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
@@ -52,10 +52,10 @@
                         <a href="#about">About</a>
                     </li>
                     <li>
-                        <a href="#methodology">Methodology</a>
+                        <a href="#dataset">Dataset</a>
                     </li>
                     <li>
-                        <a href="#visuals">Visuals</a>
+                        <a href="#methodology">Methodology</a>
                     </li>
                     <li>
                         <a href="#limitations">Limitations</a>
@@ -65,6 +65,12 @@
                     </li>
                     <li>
                         <a href="#resources">Resources</a>
+                    </li>
+                    <li>
+                        <a href="#resources">API</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/Allenfp/DataFinal">Source Code</a>
                     </li>
                 </ul>
             </div>
@@ -149,8 +155,9 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">About this Project</h2>
-                    <p class="lead">Given how common depression is, its surprising that there aren’t more ways to indicate its presence in ones life. Some individuals with suicidal tendencies share posts and comments in Social Media and these could be digital clues. We used machine learning to try to indicate it’s presence in texts wherever possible. Our tool aims to assist and identify such tendencies and help prevent potential tragedies.</p>
-                    <p class="lead">Team members: Allen, Jenny, Mehreen, and Rommel.</p>
+                    <p class="lead">Given the prevalence of depression, <a href="https://www.mailman.columbia.edu/public-health-now/news/depression-rise-us-especially-among-young-teens">especially with younger Americans</a>, it is surprising that there are not more tools in place to identify and assist those who need help. This is particularly true online, where there is evidence that indicates <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4183915/">social media may actually contribute</a> to mental health deterioration for it's users.</p>
+                    <p class="lead">Due to this unfortunate set of circumstances, our team set out to use machine learning and natural language processing in an attempt to identify depression and suicidal ideation. Our tool aims to assist and identify such tendencies and help prevent potential tragedies.</p>
+                    <p class="lead"><strong>Team members: Allen Partlow, Jenny Chin, Mehreen Seher Hai, and Rommel Angeles.</strong></p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                     <img class="img-responsive" src="{{ url_for('static', filename='img/hope2.jpg') }}" alt="">
@@ -161,25 +168,65 @@
         <!-- /.container -->
 
     </div>
-    <!-- /.content-section-a -->
 
-    <a name="methodology"></a>
+    <!-- /.content-section-b -->
+
+    <a name="dataset"></a>
     <div class="content-section-b">
 
         <div class="container">
 
-            <div class="row">
+            <div class="row"></div>
+
                 <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
+
+                        <div class="clearfix"></div>
+                        <h2 class="section-heading">Dataset</h2>
+                        <p class="lead">The dataset used in this project was constructed by extracting user submitted posts from the <a href="https://www.reddit.com/r/SuicideWatch/">r/SuicideWatch</a> and <a href="https://www.reddit.com/r/CasualConversation/">r/CasualConversation</a> subreddits found on <a href="https://www.reddit.com">Reddit.com</a>.<br>
+                        </p>
+                        <p class="lead">Data was extracted from Reddit using the <a href="https://www.reddit.com/dev/api/">Reddit API</a>, and <a href="https://praw.readthedocs.io/en/latest/">PRAW: The Python Reddit API Wrapper</a>. The Reddit API limits calls to only the 1000 most recent posts on any subreddit. To work around this limitation, we performed api calls periodically over a 10 day period for both subreddits. Posts were aggregated and checked for duplicates. 
+                        </p>
+                        <p class="lead">In the end our dataset was comprised of 3412 Reddit submissions. These submissions came out to 549,008 words, 32,288 lines, 2,873,664 characters, or about 705 pages of single spaced 12 point Times New Roman text. 
+                        </p>
+                    </div>
+                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
+                    <p> Word cloud for r/CasualConversations </p>
+                    <img class="img-responsive" src="{{ url_for('static', filename='img/Happy2.png') }}" alt="">
+                    <br><p> Word cloud for r/SuicideWatch</p>
+                    <img  class="img-responsive" src="{{ url_for('static', filename='img/Sad2.png') }}" alt="">
+                </div>
+            </div>
+            </div>
+
+        </div>
+        <!-- /.container -->
+
+    </div>
+    <!-- /.content-section-a -->
+
+    <a name="methodology"></a>
+    <div class="content-section-a">
+
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-5 col-sm-6">
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Methodology</a><br></h2>
-                    <p class="lead">We used Natural Language Processing on text scraped from subreddit sr/SuicideWatch and r/CasualConversations. After cleaning it we performed a sentiment analysis on it and took out outliers, and then trained a predictive model to recognize if a text indicates the author's happiness or sadness.</p>
+                    <p class="lead">The data taken from Reddit was classified according to which subreddit and had VADER Sentiment analysis performed on each submission. A training set of data was created separately from the test set. The training set of data was selectively pruned to eliminate exceedingly positive r/SuicideWatch submissions, and exceedingly negative r/CasualConveration submissions. This was done to create higher divergence in the training data. After the pruning process was completed, the data was fitted and transformed using a Spark Machine Learning Pipeline that created features based on TF-IDF analysis and the negative sentiment VADER Sentiment analysis and was vectorized.<br>
+                    Using the newly transformed data, a Naive Bayes multinomial classifier model is trained. This model was used to predict whether a given submission from the test set was posted in r/SuicideWatch or r/CasualConversation.  Accuracy was determined to be ~90% +/- ~2%.
+
+
+                    
+                    </p>
                     <p><h2 class="section-heading">Tools used</h2></p>
-                        <p><h3>Analysis:</h3> PySpark, Praw, VADER Sentiment Analysis, and Pandas.
-                        <p><h3>Visualization:</h3> Wordcloud, WTForms, Bootstrap, HTML, CSS</p>
+                        <p><h3>Data Collection:</h3> Python, Praw, Requests, and Pandas.
+                        <p><h3>Analysis:</h3> Python, PySpark, VADER Sentiment Analysis, and Pandas.
+                        <p><h3>Visualization:</h3> Flask, Wordcloud, WTForms, Bootstrap, HTML, CSS</p>
                 </div>
-                <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-                    <img id="myImg" style="width:500px;height:500px;" class="img-responsive" src="{{ url_for('static', filename='img/DD_NLP_Model.png') }}" alt="">
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                    <img id="myImg" style="width:500px;height:900px;" class="img-responsive" src="{{ url_for('static', filename='img/DD_NLP_Model.png') }}" alt="">
                 </div>
             </div>
             <!-- The Modal -->
@@ -193,35 +240,8 @@
         <!-- /.container -->
 
     </div>
-    <!-- /.content-section-b -->
 
-    <a name="visuals"></a>
-    <div class="content-section-a">
-
-        <div class="container">
-
-            <div class="row">
-                <div class="col-lg-5 col-sm-6">
-                    <hr class="section-heading-spacer">
-                    <div class="clearfix"></div>
-                    <h2 class="section-heading">Visuals</h2>
-                    <p class="lead">Here are the word maps from the training data.  As you can see, quick look on our data shows how texts expressing 
-                        different emotions can be very similar.
-                    </p>
-                </div>
-                <div class="col-lg-5 col-lg-offset-2 col-sm-6"> 
-                    <img class="img-responsive" src="{{ url_for('static', filename='img/Happy2.png') }}" alt="">
-                </div></br></br>
-                <div align=center class="col-lg-5 col-sm-6">
-                    <img  class="img-responsive" src="{{ url_for('static', filename='img/Sad2.png') }}" alt="">
-                </div>
-            </div>
-
-        </div>
-        <!-- /.container -->
-
-    </div>
-    <!-- /.content-section-a -->
+      <!-- /.content-section-a -->
 
     <a name="limitations"></a>
     <div class="content-section-b">
@@ -230,19 +250,22 @@
 
             <div class="row">
                 <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                    <hr class="section-heading-spacer">
+
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Limitations<br></h2>
                     <p class="lead">Below are some of the challenges and limitations we came across in our project.</p>
                     <ul>
                         <li>
-                            The model is ignorant of temporal conditions. (E.g. Stories about the past)
+                            Prediction accuracy is ~90%.
                         </li>
                         <li>
-                            Text shorter that two sentences or longer than three paragraphs tend to be less accurate.
+                            The model is ignorant of temporal conditions (E.g. Stories about the past).
                         </li>
                         <li>
-                            The model often gives false positives when the context is not personal. (Depression Self-Help, Suicide Prevention Discussion, Fiction about Depression, etc. )
+                            Text shorter that two sentences or longer than three paragraphs tends to be less accurate.
+                        </li>
+                        <li>
+                            The model often gives false positives when the context is not personal. (Depression Self-Help, Suicide Prevention Discussion, Fiction about Depression, etc.)
                         </li>
                     </ul>
                 </div>
@@ -264,15 +287,15 @@
 
             <div class="row">
                 <div class="col-lg-5 col-sm-6">
-                    <hr class="section-heading-spacer">
+
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Next Steps</h2>
                     <p class="lead">Below are some ideas of where this tool can go from here:
                     </p>
                     <ul>
                         <li>Introduce feedback loop for information on incorrect predictions.</li>
-                        <li>Seek new datasets for additional classifications (threats of violence, child abuse, symptomatology, etc).</li>
-                        <li>Create an app so this tool can be integrated to browsers and other sites.</li>
+                        <li>Seek new datasets for additional classifications (threats of violence, child abuse, other symptomatology, etc).</li>
+                        <li>Create an app so this tool can be integrated to social media sites and apps.</li>
                         <li>Help connect users with helplines and additional resources.</li>
                     </ul>
                 </div>
@@ -294,13 +317,14 @@
 
             <div class="row">
                 <div class="col-lg-5 col-lg-offset-1 col-sm-push-6  col-sm-6">
-                    <hr class="section-heading-spacer">
+
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Resources<br></h2>
+                    <p class="lead">If you yourself are feeling depressed or fear that you may harm yourself, please call 911. If you would just like to talk to someone call the <a href="https://suicidepreventionlifeline.org/media-resources/">Suicide Prevention Lifeline</a> at 1-800-273-TALK (8255) </p>
                     <p class="lead">Many thanks to <a href="https://www.reddit.com">Reddit</a> and it's users for being the source of our training data.</p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
-                    <img class="img-responsive" src="{{ url_for('static', filename='img/reddit.jpg') }}" alt="">
+                    <img class="img-responsive" style="width:500px;height:400px;"src="{{ url_for('static', filename='img/NSPL_Logo.jpg') }}" alt="">
                 </div>
             </div>
 
@@ -308,6 +332,8 @@
         <!-- /.container -->
 
     </div>
+
+    
     <!-- /.content-section-b -->    
 
 	<a  name="contact"></a>
@@ -355,11 +381,11 @@
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#methodology">Methodology</a>
+                            <a href="#dataset">Dataset</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
-                            <a href="#visuals">Visuals</a>
+                            <a href="#methodology">Methodology</a>
                         </li>
                         <li class="footer-menu-divider">&sdot;</li>
                         <li>
@@ -373,8 +399,18 @@
                         <li>
                             <a href="#resources">Resources</a>
                         </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#api">API</a>
+                        </li>
+                        <li class="footer-menu-divider">&sdot;</li>
+                        <li>
+                            <a href="#sourcecode">Source Code</a>
+                        </li>
+
+
                     </ul>
-                    <p class="copyright text-muted small">Disclaimer: This website is a project designed to predict emotional sentiments using machine learning.  This does not provide professional advice.  If you are in a state of emergency, please call 911 or/and seek professional support.  Thank you.</p>
+                    <p class="copyright text-muted small">Disclaimer: This website is a project designed to predict emotional sentiments using machine learning.  This is in no way a clinical tool, nor should it be used as a replacement for professional or clinical advice.  If you are in a state of emergency, please call 911 or/and seek professional support.  Thank you.</p>
                     <p class="copyright text-muted small">Copyright &copy; FrontRowRiders 2018. All Rights Reserved</p>
                 </div>
             </div>
