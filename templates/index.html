@@ -149,7 +149,7 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">About this Project</h2>
-                    <p class="lead">Given how common depression really is, its surprising that there aren’t more ways to indicate its presence in ones life. Some individuals with suicidal tendencies share posts and comments in Social Media and these could be digital clues. We used machine learning to try to indicate it’s presence in texts wherever possible. Our tool aims to assist and identify such tendencies and help prevent potential tragedies.</p>
+                    <p class="lead">Given how common depression is, its surprising that there aren’t more ways to indicate its presence in ones life. Some individuals with suicidal tendencies share posts and comments in Social Media and these could be digital clues. We used machine learning to try to indicate it’s presence in texts wherever possible. Our tool aims to assist and identify such tendencies and help prevent potential tragedies.</p>
                     <p class="lead">Team members: Allen, Jenny, Mehreen, and Rommel.</p>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
@@ -175,8 +175,8 @@
                     <h2 class="section-heading">Methodology</a><br></h2>
                     <p class="lead">We used Natural Language Processing on text scraped from subreddit sr/SuicideWatch and r/CasualConversations. After cleaning it we performed a sentiment analysis on it and took out outliers, and then trained a predictive model to recognize if a text indicates the author's happiness or sadness.</p>
                     <p><h2 class="section-heading">Tools used</h2></p>
-                        <p><h3>Analysis:</h3> PySpark, Praw, NLTK, VADER Sentiment Analysis, Pandas, WTForms
-                        <p><h3>Visualization:</h3> Wordcloud,  Bootstrap, HTML, CSS</p>
+                        <p><h3>Analysis:</h3> PySpark, Praw, VADER Sentiment Analysis, and Pandas.
+                        <p><h3>Visualization:</h3> Wordcloud, WTForms, Bootstrap, HTML, CSS</p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                     <img id="myImg" style="width:500px;height:500px;" class="img-responsive" src="{{ url_for('static', filename='img/DD_NLP_Model.png') }}" alt="">
@@ -209,11 +209,11 @@
                         different emotions can be very similar.
                     </p>
                 </div>
-                <div class="col-lg-5 col-lg-offset-2 col-sm-6">
+                <div class="col-lg-5 col-lg-offset-2 col-sm-6"> 
                     <img class="img-responsive" src="{{ url_for('static', filename='img/Happy2.png') }}" alt="">
                 </div></br></br>
-                <div align=center class="col-lg-5 col-lg-offset-2 col-sm-6">
-                    <img class="img-responsive" src="{{ url_for('static', filename='img/Sad2.png') }}" alt="">
+                <div align=center class="col-lg-5 col-sm-6">
+                    <img  class="img-responsive" src="{{ url_for('static', filename='img/Sad2.png') }}" alt="">
                 </div>
             </div>
 
@@ -236,13 +236,13 @@
                     <p class="lead">Below are some of the challenges and limitations we came across in our project.</p>
                     <ul>
                         <li>
-                            Text needs to be of slightly personal nature.
+                            The model is ignorant of temporal conditions. (E.g. Stories about the past)
                         </li>
                         <li>
-                            Short sentences can yield incorrect predictions.
+                            Text shorter that two sentences or longer than three paragraphs tend to be less accurate.
                         </li>
                         <li>
-                            Strong words such as "happy" and "excited" can skew the results.
+                            The model often gives false positives when the context is not personal. (Depression Self-Help, Suicide Prevention Discussion, Fiction about Depression, etc. )
                         </li>
                     </ul>
                 </div>
@@ -270,9 +270,10 @@
                     <p class="lead">Below are some ideas of where this tool can go from here:
                     </p>
                     <ul>
-                        <li>Feedback Loop</li>
-                        <li>Create an app so this tool can be integrated to browsers and other sites</li>
-                        <li>Help connect users with helplines</li>
+                        <li>Introduce feedback loop for information on incorrect predictions.</li>
+                        <li>Seek new datasets for additional classifications (threats of violence, child abuse, symptomatology, etc).</li>
+                        <li>Create an app so this tool can be integrated to browsers and other sites.</li>
+                        <li>Help connect users with helplines and additional resources.</li>
                     </ul>
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
@@ -296,7 +297,7 @@
                     <hr class="section-heading-spacer">
                     <div class="clearfix"></div>
                     <h2 class="section-heading">Resources<br></h2>
-                    <p class="lead">Many thanks to <a href="https://www.reddit.com">Reddit</a> as the source of our training data.</p>
+                    <p class="lead">Many thanks to <a href="https://www.reddit.com">Reddit</a> and it's users for being the source of our training data.</p>
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                     <img class="img-responsive" src="{{ url_for('static', filename='img/reddit.jpg') }}" alt="">

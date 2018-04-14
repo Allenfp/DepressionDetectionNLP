@@ -117,10 +117,13 @@ def check_string(test_string):
     probability_sad = probability[0]
     probability_normal = probability[1]
 
-    if prediction == 0:
-        response = f"YIKES! There is ample evidence to indicate sadness and/or depression.  Model Probability: {round(probability_sad*100)}% "
-    else:
+    if prediction == 0 and probability_sad >= .75:
+        response = f"YIKES! There is ample evidence to indicate sadness and/or depression.  Reliability: {round(probability_sad*100)}% "
+    elif prediction == 0 and probability_normal >= .75:
         response = f"Everything is looking good over here! Model Probability: {round(probability_normal*100)}% "
+    else:
+        response = f"Sorry, the analysis is not confident enough to render a reliabile decision with the given text. Please try a longer submission."
+            
 
     return response
 
