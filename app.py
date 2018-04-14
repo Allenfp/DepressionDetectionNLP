@@ -1,4 +1,4 @@
-from flask import Flask, render_template, flash, request
+from flask import Flask, render_template, flash, request, jsonify
 from wtforms import Form, TextField, TextAreaField, validators, StringField, SubmitField
 import pandas as pd
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
@@ -128,6 +128,54 @@ def check_string(test_string):
     return response
 
 
+def check_string_api(test_string):
+
+    #Create Single Input Pandas DataFrame.
+    d = {'combined': test_string, 'pos':"", 'neg':""}
+    df = pd.DataFrame(d, index=[0])
+
+    #Analyze Sentiment and Populate DataFrame. 
+    analyzer = SentimentIntensityAnalyzer()
+    for index, row in df.iterrows():
+        scores = analyzer.polarity_scores(row[0])
+        pos = scores['pos']
+        neg = scores['neg']
+        row[1] = pos 
+        row[2] = neg
+
+    #Convert to Spark DataFrame.
+    sdf = spark.createDataFrame(df)
+
+    #Fit & Clean Spark DataFrame 
+    cleaned_sc = cleaner_train.transform(sdf)
+    cleaned_sc.show()
+    print(type(sub_predictor))
+
+    #Perform Prediction and Print results.
+    pc_results = sub_predictor.transform(cleaned_sc)
+    pc_results.select('probability', 'prediction').show(truncate=False)
+    print("1 = Casual Conversation, 0 = Depression/Suicial Ideation")
+
+    
+    prediction = pc_results.select('prediction').rdd.map(lambda row : row[0]).collect()[0]
+    probability = pc_results.select('probability').rdd.map(lambda row : row[0]).collect()[0]
+    vader_senti_pos = sdf.select('pos').rdd.map(lambda row : row[0]).collect()[0]
+    vader_senti_neg = sdf.select('neg').rdd.map(lambda row : row[0]).collect()[0]
+    probability_sad = probability[0]
+    probability_normal = probability[1]
+
+    response = {
+        'prediction' : prediction,
+        'probability_depression_0' : probability_sad,
+        'probability_normal_1' : probability_normal,
+        'vader_senti_pos' : vader_senti_pos,
+        'vader_senti_neg' : vader_senti_neg
+    }
+
+
+    return response
+
+
 
 # App config.
 DEBUG = True
@@ -155,6 +203,12 @@ def hello():
             flash('Error: All the form fields are required. ')
  
     return render_template('index.html', form=form)
+
+@app.route("/api/v1.0/<_string>", methods=['GET'])
+def api(_string):
+
+    return jsonify(check_string_api(_string))
+
  
 if __name__ == "__main__":
     app.run()
