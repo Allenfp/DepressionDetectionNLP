@@ -4,7 +4,9 @@
 
 ## Tools used
 Data Collection: Python, Praw, Requests, and Pandas.
+
 Analysis: Python, PySpark, VADER Sentiment Analysis, and Pandas.
+
 Visualization: Flask, Wordcloud, WTForms, Bootstrap, HTML, CSS.
 
 
