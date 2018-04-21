@@ -3,14 +3,12 @@
 #### The purpose of this project was to develop an application that could be used to detect depression or suicidal ideation in user submitted social media posts. 
 
 ## Tools used
---------------
 Data Collection: Python, Praw, Requests, and Pandas.
 Analysis: Python, PySpark, VADER Sentiment Analysis, and Pandas.
 Visualization: Flask, Wordcloud, WTForms, Bootstrap, HTML, CSS.
 
 
 ## Methodology
----------------
 The dataset used in this project was constructed by extracting user submitted posts from the r/SuicideWatch and r/CasualConversation subreddits found on Reddit.com.
 Data was extracted from Reddit using the Reddit API, and PRAW: The Python Reddit API Wrapper. The Reddit API limits calls to only the 1000 most recent posts on any subreddit. 
 To work around this limitation, we performed api calls periodically over a 10 day period for both subreddits. 
@@ -26,9 +24,7 @@ After the pruning process was completed, the data was fitted and transformed usi
 Using the newly transformed data, a Naive Bayes multinomial classifier model is trained. This model was used to predict whether a given submission from the test set was posted in r/SuicideWatch or r/CasualConversation. Accuracy was determined to be ~90% +/- ~2%.
 
 ## Flowchart
---------------
 ![alt text](https://github.com/Allenfp/DepressionDetectionNLP/blob/master/wordmap_and_flowchart/Depression%20Detecting%20NLP%20Model.png)
 
 ## Website
----------------
 ![alt text](https://github.com/Allenfp/DepressionDetectionNLP/blob/master/DepressionNLPwebsite.png)
