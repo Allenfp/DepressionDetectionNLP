@@ -2,6 +2,22 @@
 
 #### The purpose of this project was to develop an application that could be used to detect depression or suicidal ideation in user submitted social media posts. 
 
+## How to use the app.
+To run the application, simply enter the following code into your terminal:
+
+```git clone https://github.com/Allenfp/DepressionDetectionNLP```
+
+
+Once the repository is downloaded enter the following command into your command line:
+
+```python app.py```
+
+Once the application is running, go to the web address shown on the terminal. Thats it!
+
+## Performing analysis
+There are two ways to use the app. One is using the website's "Enter comment here..." and pressing submit. The other way is using the app's API. For instructions on using the api [click this link.](https://github.com/Allenfp/DepressionDetectionNLP/blob/master/API_documentation.md)
+
+
 ## Tools used
 Data Collection: Python, Praw, Requests, and Pandas.
 
