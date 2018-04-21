@@ -41,6 +41,11 @@ The training set of data was selectively pruned to eliminate exceedingly positiv
 After the pruning process was completed, the data was fitted and transformed using a Spark Machine Learning Pipeline that created features based on TF-IDF analysis and the negative sentiment VADER Sentiment analysis and was vectorized.
 Using the newly transformed data, a Naive Bayes multinomial classifier model is trained. This model was used to predict whether a given submission from the test set was posted in r/SuicideWatch or r/CasualConversation. Accuracy was determined to be ~90% +/- ~2%.
 
+## Disclaimer 
+This website is a project designed to predict emotional sentiments using machine learning. This is in no way a clinical tool, nor should it be used as a replacement for professional or clinical advice. If you are in a state of emergency, please call 911 or/and seek professional support immediately. 
+
+
+
 ## Flowchart
 ![alt text](https://github.com/Allenfp/DepressionDetectionNLP/blob/master/wordmap_and_flowchart/Depression%20Detecting%20NLP%20Model.png)
 
