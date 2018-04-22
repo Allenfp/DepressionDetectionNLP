@@ -2,20 +2,20 @@
 
 ## Retrieve Sentiments
 
-# URL - 
+#### URL - 
 
 /api/v1.0/<your_string_here>
 
-# URL PARAMS - 
+#### URL PARAMS - 
 
 None. Simply enter your string at the end of the API endpoint for a jsonified 
 analysis.
 
-# SAMPLE CALL -
+#### SAMPLE CALL -
 
 127.0.0.1:5000/api/v1.0/I am having a lovely evening despite the weather.
 
-# SAMPLE RESULT - 
+#### SAMPLE RESULT - 
 
     {
     "prediction": 1.0, 
@@ -25,7 +25,7 @@ analysis.
     "vader_senti_pos": 0.0
     }
 
-# DESCRIPTION OF RESULT PARAMS
+#### DESCRIPTION OF RESULT PARAMS
 
 *"prediction" is a binary return value. If 0, depression or suicidal ideation is detected.
 *"probability_depression_0" is a probability (between 0 and 1) of the model's confidence that
