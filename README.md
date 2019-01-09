@@ -1,6 +1,5 @@
 # Detecting Human Emotions Using Natural Language Processing
 
-# [Video Demonstration (YouTube)](https://youtu.be/tMPek5-RY40)
 
 #### The purpose of this project was to develop an application that could be used to detect depression or suicidal ideation in user submitted social media posts. 
 
