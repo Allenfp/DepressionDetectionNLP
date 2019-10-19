@@ -11,7 +11,7 @@
 None. Simply enter your string at the end of the API endpoint for a jsonified 
 analysis.
 
-#### SAMPLE CALL -
+#### SAMPLE CALL - 
 
 127.0.0.1:5000/api/v1.0/I am having a lovely evening despite the weather.
 
