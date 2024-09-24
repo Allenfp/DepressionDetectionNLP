@@ -1,3 +1,6 @@
+# NOTE: This repo is un-maintained and is strictly for kept for it's sentimental value to the contributors. 
+
+
 # Detecting Human Emotions Using Natural Language Processing
 
 
